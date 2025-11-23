@@ -16,12 +16,12 @@ void coindidence(string file_angles, string file_coindicence);
 
 
 int main (){
-    output_data("Data\\dane_1.log", "Output\\angles_1.txt");
-    output_data("Data\\dane_2.log", "Output\\angles_2.txt");
-    time_to_angle("Output\\angles_1.txt");
-    time_to_angle("Output\\angles_2.txt");
-    coindidence("Output\\angles_1.txt", "Output\\coin_1.txt");
-    coindidence("Output\\angles_2.txt", "Output\\coin_2.txt");
+    output_data("../Data/dane_1.log", "../Output/angles_1.txt");
+    output_data("../Data/dane_2.log", "../Output/angles_2.txt");
+    time_to_angle("../Output/angles_1.txt");
+    time_to_angle("../Output/angles_2.txt");
+    coindidence("../Output/angles_1.txt", "../Output/coin_1.txt");
+    coindidence("../Output/angles_2.txt", "../Output/coin_2.txt");
     return 0;
 }
 
@@ -248,7 +248,7 @@ void coindidence(string file_angles, string file_coindicence){
 
             // If field 1 equals "000000", write selected fields
             if (read_line(1, line.size(), line) == "000000"){
-            file << read_line(0, line.size(), line) << ";";
+            //file << read_line(0, line.size(), line) << ";";
             //file << read_line(1, line.size(), line) << ";";
             //file << read_line(2, line.size(), line) << ";";
             file << read_line(3, line.size(), line) << endl;
