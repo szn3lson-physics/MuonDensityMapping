@@ -13,15 +13,27 @@ int read_bit(int position, int line_size, string line);
 void time_to_angle(const string& file_angles);
 void output_data(string file_dane, string file_angles);
 void coindidence(string file_angles, string file_coindicence);
+void coindidence_3_4(string file_angles, string file_coindicence);
+void coindidence_3_4f(string file_angles, string file_coindicence);
 
 
 int main (){
-    output_data("../Data/dane_1.log", "../Output/angles_1.txt");
-    output_data("../Data/dane_2.log", "../Output/angles_2.txt");
-    time_to_angle("../Output/angles_1.txt");
-    time_to_angle("../Output/angles_2.txt");
-    coindidence("../Output/angles_1.txt", "../Output/coin_1.txt");
-    coindidence("../Output/angles_2.txt", "../Output/coin_2.txt");
+    //output_data("../Data/dane_1.log", "../Output/angles_1.txt");
+    //output_data("../Data/dane_2.log", "../Output/angles_2.txt");
+    //time_to_angle("../Output/angles_1.txt");
+    //time_to_angle("../Output/angles_2.txt");
+    //coindidence("../Output/angles_1.txt", "../Output/coin_1.txt");
+    //coindidence("../Output/angles_2.txt", "../Output/coin_2.txt");
+    //coindidence_3_4("../Output/angles_1.txt", "../Output/coin_1_34.txt");
+    //coindidence_3_4("../Output/angles_2.txt", "../Output/coin_2_34.txt");
+    //coindidence_3_4f("../Output/angles_1.txt", "../Output/coin_1_34f.txt");
+    //coindidence_3_4f("../Output/angles_2.txt", "../Output/coin_2_34f.txt");
+
+    output_data("../Data/dane_26.11.2025.log", "../Output/angles_26_11.txt");
+    time_to_angle("../Output/angles_26_11.txt");
+    coindidence("../Output/angles_26_11.txt", "../Output/coin_26_11.txt");
+    coindidence_3_4f("../Output/angles_26_11.txt", "../Output/coin_26_11_34.txt");
+
     return 0;
 }
 
@@ -262,3 +274,96 @@ void coindidence(string file_angles, string file_coindicence){
     data.close();
 }
 
+void coindidence_3_4(string file_angles, string file_coindicence){
+    fstream data;
+    data.open(file_angles, ios::in);
+
+    if(data.good()){
+        cout << "Acess to file has been granted!" << endl;
+        
+        string line;
+        fstream file(file_coindicence, ios::out);
+
+        while (!data.eof()) {
+            getline(data, line);
+
+            // If field 1 equals "000000", write selected fields
+            if (read_line(1, line.size(), line) == "000000"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            else if (read_line(1, line.size(), line) == "001011"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            else if (read_line(1, line.size(), line) == "111000"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+        }
+    } 
+    else {
+        cout << "Access to file was denided!" << endl;
+    }
+
+    data.close();
+}
+
+void coindidence_3_4f(string file_angles, string file_coindicence){
+    fstream data;
+    data.open(file_angles, ios::in);
+
+    if(data.good()){
+        cout << "Acess to file has been granted!" << endl;
+        
+        string line;
+        fstream file(file_coindicence, ios::out);
+
+        while (!data.eof()) {
+            getline(data, line);
+
+            // If field 1 equals "000000", write selected fields
+            if (read_line(1, line.size(), line) == "000000"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            else if (read_line(1, line.size(), line) == "001011"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            else if (read_line(1, line.size(), line) == "111000"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            else if (read_line(1, line.size(), line) == "010101"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            else if (read_line(1, line.size(), line) == "100110"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+        }
+    } 
+    else {
+        cout << "Access to file was denided!" << endl;
+    }
+
+    data.close();
+}
