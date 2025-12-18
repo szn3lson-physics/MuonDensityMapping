@@ -12,28 +12,60 @@ string read_binary_string(int position, int line_size, string line);
 int read_bit(int position, int line_size, string line);
 void time_to_angle(const string& file_angles);
 void output_data(string file_dane, string file_angles);
-void coindidence(string file_angles, string file_coindicence);
+void coindidence_4(string file_angles, string file_coindicence);
 void coindidence_3_4(string file_angles, string file_coindicence);
 void coindidence_3_4f(string file_angles, string file_coindicence);
+void coindidence_3f(string file_angles, string file_coindicence);
+void coindidence_3(string file_angles, string file_coindicence);
+void process(string inputFileName, string outputFileName, int multiplier);
+
+void coindidence_134_234(string file_angles, string file_coindicence);
+void coindidence_123_124(string file_angles, string file_coindicence);
 
 
 int main (){
-    //output_data("../Data/dane_1.log", "../Output/angles_1.txt");
-    //output_data("../Data/dane_2.log", "../Output/angles_2.txt");
-    //time_to_angle("../Output/angles_1.txt");
-    //time_to_angle("../Output/angles_2.txt");
-    //coindidence("../Output/angles_1.txt", "../Output/coin_1.txt");
-    //coindidence("../Output/angles_2.txt", "../Output/coin_2.txt");
-    //coindidence_3_4("../Output/angles_1.txt", "../Output/coin_1_34.txt");
-    //coindidence_3_4("../Output/angles_2.txt", "../Output/coin_2_34.txt");
-    //coindidence_3_4f("../Output/angles_1.txt", "../Output/coin_1_34f.txt");
-    //coindidence_3_4f("../Output/angles_2.txt", "../Output/coin_2_34f.txt");
+    
+    output_data("../Data/dane_1.log", "../Output/dane_1/angles_1.txt");
+    output_data("../Data/dane_2.log", "../Output/dane_2/angles_2.txt");
+    output_data("../Data/dane_3.log", "../Output/dane_3/angles_3.txt");
+    output_data("../Data/dane_4.log", "../Output/dane_4/angles_4.txt");
+    
+    time_to_angle("../Output/dane_1/angles_1.txt");
+    time_to_angle("../Output/dane_2/angles_2.txt");
+    time_to_angle("../Output/dane_3/angles_3.txt");
+    time_to_angle("../Output/dane_4/angles_4.txt");
 
-    output_data("../Data/dane_26.11.2025.log", "../Output/angles_26_11.txt");
-    time_to_angle("../Output/angles_26_11.txt");
-    coindidence("../Output/angles_26_11.txt", "../Output/coin_26_11.txt");
-    coindidence_3_4f("../Output/angles_26_11.txt", "../Output/coin_26_11_34.txt");
+    coindidence_3("../Output/dane_1/angles_1.txt", "../Output/dane_1/raw/coin_1_3.txt");
+    coindidence_3("../Output/dane_2/angles_2.txt", "../Output/dane_2/raw/coin_2_3.txt");
+    coindidence_3("../Output/dane_3/angles_3.txt", "../Output/dane_3/raw/coin_3_3.txt");
+    coindidence_3("../Output/dane_4/angles_4.txt", "../Output/dane_4/raw/coin_4_3.txt");
 
+    coindidence_3f("../Output/dane_1/angles_1.txt", "../Output/dane_1/raw/coin_1_3f.txt");
+    coindidence_3f("../Output/dane_2/angles_2.txt", "../Output/dane_2/raw/coin_2_3f.txt");
+    coindidence_3f("../Output/dane_3/angles_3.txt", "../Output/dane_3/raw/coin_3_3f.txt");
+    coindidence_3f("../Output/dane_4/angles_4.txt", "../Output/dane_4/raw/coin_4_3f.txt");
+
+    coindidence_4("../Output/dane_1/angles_1.txt", "../Output/dane_1/raw/coin_1_4.txt");
+    coindidence_4("../Output/dane_2/angles_2.txt", "../Output/dane_2/raw/coin_2_4.txt");
+    coindidence_4("../Output/dane_3/angles_3.txt", "../Output/dane_3/raw/coin_3_4.txt");
+    coindidence_4("../Output/dane_4/angles_4.txt", "../Output/dane_4/raw/coin_4_4.txt");
+
+    coindidence_3_4("../Output/dane_1/angles_1.txt", "../Output/dane_1/raw/coin_1_34.txt");
+    coindidence_3_4("../Output/dane_2/angles_2.txt", "../Output/dane_2/raw/coin_2_34.txt");
+    coindidence_3_4("../Output/dane_3/angles_3.txt", "../Output/dane_3/raw/coin_3_34.txt");
+    coindidence_3_4("../Output/dane_4/angles_4.txt", "../Output/dane_4/raw/coin_4_34.txt");
+
+    coindidence_3_4f("../Output/dane_1/angles_1.txt", "../Output/dane_1/raw/coin_1_34f.txt");
+    coindidence_3_4f("../Output/dane_2/angles_2.txt", "../Output/dane_2/raw/coin_2_34f.txt");
+    coindidence_3_4f("../Output/dane_3/angles_3.txt", "../Output/dane_3/raw/coin_3_34f.txt");
+    coindidence_3_4f("../Output/dane_4/angles_4.txt", "../Output/dane_4/raw/coin_4_34f.txt");
+    
+    coindidence_134_234("../Output/all/angles_all.txt", "../Output/all/coin_134_234.txt");
+    coindidence_123_124("../Output/all/angles_all.txt", "../Output/all/coin_123_124.txt");
+
+    process("../Output/coin_x_x.txt", "../Output/processed_x_x.txt");
+    process("../Output/coin_x_x.txt", "../Output/processed_x_x.txt");
+    
     return 0;
 }
 
@@ -64,7 +96,7 @@ string read_line(int position, int line_size, string line){
 // ---------------------------------------------------------------------------
 int read_int(int position, int line_size, string line)
 {
-    return stoi(read_line(position, line_size, line));
+    return stoi(read_line(position, line_size, line)); //stoi - string to intiger
 }
 
 // ---------------------------------------------------------------------------
@@ -243,9 +275,12 @@ void output_data(string file_data, string file_angles){
 // 0, 1, 2, and 3 in semicolon-separated format.
 //
 // Example output line:
-//     value0;value1;value2;value3
+//     value0 
+//     value1
+//     value2
+//     value3
 // ---------------------------------------------------------------------------
-void coindidence(string file_angles, string file_coindicence){
+void coindidence_4(string file_angles, string file_coindicence){
     fstream data;
     data.open(file_angles, ios::in);
 
@@ -274,6 +309,22 @@ void coindidence(string file_angles, string file_coindicence){
     data.close();
 }
 
+// ---------------------------------------------------------------------------
+// coincidence_3_4()
+// ---------------------------------------------------------------------------
+// Reads an input file (file_angles) and filters the lines based on field 1.
+// Only lines where field 1 are "000000" or "001011" or "111000" reffered as 
+// true three coincidences (only combinations where muon pass through detector 
+// 1-2, or 3-4, all hits all of them), then are written to the output file 
+// (file_coindicence). For those lines, the function outputs fields 0, 1, 2, 
+// and 3 in semicolon-separated format.
+//
+// Example output line:
+//     value0 
+//     value1
+//     value2
+//     value3
+// ---------------------------------------------------------------------------
 void coindidence_3_4(string file_angles, string file_coindicence){
     fstream data;
     data.open(file_angles, ios::in);
@@ -315,6 +366,22 @@ void coindidence_3_4(string file_angles, string file_coindicence){
     data.close();
 }
 
+// ---------------------------------------------------------------------------
+// coincidence_3_4f()
+// ---------------------------------------------------------------------------
+// Reads an input file (file_angles) and filters the lines based on field 1.
+// Only lines where field 1 are all possible three and four coincidences, even the
+// ones that are not physical - i.e. detector 1 and 3. They are taken in coside-
+// ration due to effectiveness of detectors which is below 100%. Then are written 
+// to the output file (file_coindicence). For those lines, the function outputs 
+// fields 0, 1, 2, and 3 in semicolon-separated format.
+//
+// Example output line:
+//     value0 
+//     value1
+//     value2
+//     value3
+// ---------------------------------------------------------------------------
 void coindidence_3_4f(string file_angles, string file_coindicence){
     fstream data;
     data.open(file_angles, ios::in);
@@ -354,6 +421,271 @@ void coindidence_3_4f(string file_angles, string file_coindicence){
             file << read_line(3, line.size(), line) << endl;
             }
             else if (read_line(1, line.size(), line) == "100110"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+        }
+    } 
+    else {
+        cout << "Access to file was denided!" << endl;
+    }
+
+    data.close();
+}
+
+// ---------------------------------------------------------------------------
+// coincidence_3f()
+// ---------------------------------------------------------------------------
+// Reads an input file (file_angles) and filters the lines based on field 1.
+// Only lines where field 1 are all possible three three coincidences, even the
+// ones that are not physical - i.e. detector 1 and 3. They are taken in coside-
+// ration due to effectiveness of detectors which is below 100%. Then are written 
+// to the output file (file_coindicence). For those lines, the function outputs 
+// fields 0, 1, 2, and 3 in semicolon-separated format.
+//
+// Example output line:
+//     value0 
+//     value1
+//     value2
+//     value3
+// ---------------------------------------------------------------------------
+void coindidence_3f(string file_angles, string file_coindicence){
+    fstream data;
+    data.open(file_angles, ios::in);
+
+    if(data.good()){
+        cout << "Acess to file has been granted!" << endl;
+        
+        string line;
+        fstream file(file_coindicence, ios::out);
+
+        while (!data.eof()) {
+            getline(data, line);
+
+            // If field 1 equals "000000", write selected fields
+            //if (read_line(1, line.size(), line) == "000000"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            //file << read_line(3, line.size(), line) << endl;
+            //}
+            if (read_line(1, line.size(), line) == "001011"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            else if (read_line(1, line.size(), line) == "111000"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            else if (read_line(1, line.size(), line) == "010101"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            else if (read_line(1, line.size(), line) == "100110"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+        }
+    } 
+    else {
+        cout << "Access to file was denided!" << endl;
+    }
+
+    data.close();
+}
+
+void coindidence_3(string file_angles, string file_coindicence){
+fstream data;
+    data.open(file_angles, ios::in);
+
+    if(data.good()){
+        cout << "Acess to file has been granted!" << endl;
+        
+        string line;
+        fstream file(file_coindicence, ios::out);
+
+        while (!data.eof()) {
+            getline(data, line);
+
+            // If field 1 equals "000000", write selected fields
+            //if (read_line(1, line.size(), line) == "000000"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            //file << read_line(3, line.size(), line) << endl;
+            //}
+            if (read_line(1, line.size(), line) == "001011"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            else if (read_line(1, line.size(), line) == "111000"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            //else if (read_line(1, line.size(), line) == "010101"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            //file << read_line(3, line.size(), line) << endl;
+            //}
+            //else if (read_line(1, line.size(), line) == "100110"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            //file << read_line(3, line.size(), line) << endl;
+            //}
+        }
+    } 
+    else {
+        cout << "Access to file was denided!" << endl;
+    }
+
+    data.close();
+}
+
+// ---------------------------------------------------------------------------
+// process()
+// ---------------------------------------------------------------------------
+// Reads an input text file containing integer values, one per line. Each value
+// is transformed by rounding it to the nearest multiple of (3 * multiplier).
+// 
+// The step size used for rounding is:
+//     step = 3 * multiplier
+//
+// The transformation applied is:
+//     output = step * floor((input + step/2) / step)
+// where integer division is used. This results in rounding each number to the
+// nearest multiple of the step size.
+//
+// Examples for multiplier = 1  (step = 3):
+//   input: 1  → output: 0
+//   input: 2  → output: 3
+//   input: 4  → output: 3
+//   input: 5  → output: 6
+//
+// Examples for multiplier = 10 (step = 30):
+//   input: 17  → output: 0
+//   input: 29  → output: 30
+//   input: 44  → output: 30
+//   input: 46  → output: 60
+//
+// Parameters:
+//   - inputFileName:   path to the input file containing integers
+//   - outputFileName:  path to the output file where results will be saved
+//   - multiplier:      scaling factor; the rounding step becomes 3 * multiplier
+//
+// Side effects:
+//   - Writes processed values to the output file
+//   - Prints status and error messages to stdout/stderr
+//
+// The function completes after all integers from the input file are processed.
+// ---------------------------------------------------------------------------
+void process(string inputFileName, string outputFileName, int multiplier){
+    // 1. Opening the input file
+    ifstream inputFile(inputFileName); 
+    if (!inputFile.is_open()) {
+        cerr << "Error: Cannot open file " << inputFileName << " for reading." << endl;
+    }
+
+    // 2. Opening the output file
+    ofstream outputFile(outputFileName);
+    if (!outputFile.is_open()) {
+        cerr << "Error: Cannot open file " << outputFileName << " for writing." << endl;
+        inputFile.close();
+    }
+
+    int inputValue;
+    int outputValue;
+
+    // Step size computed as 3 * multiplier
+    int step = 3 * multiplier;
+
+    // 3. Reading, processing, and writing
+    while (inputFile >> inputValue) {
+        // Transformation logic: step * floor((inputValue + step/2) / step)
+        // integer division is used
+        outputValue = step * ((inputValue + step/2) / step);
+
+        // Writing to file
+        outputFile << outputValue << endl;
+    }
+
+    // 4. Closing the files
+    inputFile.close();
+    outputFile.close();
+
+    cout << "Processing completed with step " << step 
+         << ". Results saved to file " << outputFileName << endl;
+}
+
+void coindidence_123_124(string file_angles, string file_coindicence){
+    fstream data;
+    data.open(file_angles, ios::in);
+
+    if(data.good()){
+        cout << "Acess to file has been granted!" << endl;
+        
+        string line;
+        fstream file(file_coindicence, ios::out);
+
+        while (!data.eof()) {
+            getline(data, line);
+
+            if (read_line(1, line.size(), line) == "001011"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            else if (read_line(1, line.size(), line) == "010101"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+        }
+    } 
+    else {
+        cout << "Access to file was denided!" << endl;
+    }
+
+    data.close();
+}
+
+void coindidence_134_234(string file_angles, string file_coindicence){
+    fstream data;
+    data.open(file_angles, ios::in);
+
+    if(data.good()){
+        cout << "Acess to file has been granted!" << endl;
+        
+        string line;
+        fstream file(file_coindicence, ios::out);
+
+        while (!data.eof()) {
+            getline(data, line);
+
+            if (read_line(1, line.size(), line) == "100110"){
+            //file << read_line(0, line.size(), line) << ";";
+            //file << read_line(1, line.size(), line) << ";";
+            //file << read_line(2, line.size(), line) << ";";
+            file << read_line(3, line.size(), line) << endl;
+            }
+            else if (read_line(1, line.size(), line) == "111000"){
             //file << read_line(0, line.size(), line) << ";";
             //file << read_line(1, line.size(), line) << ";";
             //file << read_line(2, line.size(), line) << ";";
