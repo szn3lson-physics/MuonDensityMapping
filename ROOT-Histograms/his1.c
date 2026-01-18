@@ -2,9 +2,11 @@ void his1() {
     // -----------------------------
     //   1. Create histogram and fill
     // -----------------------------
-    TH1F *hist = new TH1F("hist", "Histogram 3 Coincidences 15 degree;Angle;Particles", 12, 0, 180);
 
-    std::fstream file("Output/dane_4/processed/coin_4_3.txt", std::ios::in);
+    //give it a name - for future task automatise that ->
+    TH1F *hist = new TH1F("hist", "Histogram 34f Coincidences 15 degree;Angle;Particles", 12, 0, 180);
+
+    std::fstream file("Output/all/3.december_17.12/coin_34f", std::ios::in); // still manually put the name of the data
     double value;
     while (file >> value) {
         hist->Fill(value);
@@ -16,14 +18,14 @@ void his1() {
     // -----------------------------
     
     // Set manually the sigma of the histogram (e.g., 5 sigmas)
-    double manual_sigma = 1.0;
+    double manual_sigma = 2.0;
 
     // Calculate mean Y value (number of particles/counts)
-    // Create a temporary histogram to easily retrieve Y statistics
+    // Create a temporary histogram to retrieve Y statistics
     TH1F *h_temp = (TH1F*)hist->Clone("h_temp");
     
     // In ROOT, GetMean() on a TH1F returns the mean of the X-axis.
-    // To get the mean of the counts (Y-axis), we must average the content of all bins.
+    // To get the mean of the counts (Y-axis), average the content of all bins.
     double sum_of_entries = hist->GetEntries();
     double sum_of_content = hist->Integral(); // Sum of content of all bins
     
@@ -34,12 +36,12 @@ void his1() {
     double sigma_y = manual_sigma * TMath::Sqrt(mean_y);
     
     // Significance level
-    double sigma = manual_sigma * sigma_y;
+    double sigma = sigma_y;
 
     delete h_temp; // Remove the temporary histogram
     
     // -----------------------------
-    //   2. Apply global style
+    //   Apply global style
     // -----------------------------
     gStyle->SetOptStat(0);       // No statistics box
     gStyle->SetPadGridX(kTRUE);  // Grid (X)
@@ -49,7 +51,7 @@ void his1() {
     gStyle->SetPalette(kLightTemperature);
 
     // -----------------------------
-    //   3. Histogram style
+    //   Histogram style
     // -----------------------------
     hist->SetLineColor(kRed);
     hist->SetLineWidth(2);
@@ -57,12 +59,12 @@ void his1() {
     hist->SetStats(0);
 
     // -----------------------------
-    //   4. Canvas
+    //   Canvas
     // -----------------------------
     TCanvas *c1 = new TCanvas("c1", "Histogram", 900, 600);
 
     // -----------------------------
-    //   6. Draw (first to establish the axes)
+    //   Draw (first to establish the axes)
     // -----------------------------
     hist->Draw("HIST");
     
@@ -77,7 +79,7 @@ void his1() {
 
 
     // -----------------------------
-    //   7. Mean Y line (Baseline)
+    //   Mean Y line (Baseline)
     // -----------------------------
     // Draw a horizontal line at Mean_Y height
     TLine *mean_y_line = new TLine(x_min, mean_y, x_max, mean_y);
@@ -95,7 +97,7 @@ void his1() {
 
 
     // -----------------------------
-    //   8. Significance lines (+- 5*sigma Y)
+    //   Significance lines (+- 5*sigma Y)
     // -----------------------------
     
     // Upper significance level (+5*sigma)

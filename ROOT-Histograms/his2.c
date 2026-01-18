@@ -8,25 +8,28 @@
 #include <iostream>
 #include <cmath>
 
+// This ROOT script has been made to visualise detection structure
+// Still the programme is in development stage.
+
 void his2() {
 
-    // --- Styl wykresu ---
+    // --- Plot style ---
     gStyle->SetOptStat(0);
     gStyle->SetPalette(kLightTemperature);
     gStyle->SetNumberContours(600);
 
-    const int RES = 1000;       // rozdzielczość siatki
-    const double Rmax = 1;       // promień obszaru rysowania
+    const int RES = 1000;       // grid resolution
+    const double Rmax = 1;      // drawing area radius
 
     TCanvas *c1 = new TCanvas("c1","PSF Test",1200,1200);
 
     TH2F *hist = new TH2F("hist",
-                          "Coincidance 4;X;Y",
+                          "Coincidence 4;X;Y",
                           RES, -Rmax, Rmax,
                           RES, -Rmax, Rmax);
     hist->SetStats(0);
 
-    // --- Wczytujemy kąty (0..180°) z filtrowaniem błędnych wartości ---
+    // --- Load angles (0..180°) with filtering of invalid values ---
     std::vector<double> angles;
     std::ifstream fin("Output/test.txt");
     double ang;
@@ -38,10 +41,10 @@ void his2() {
 
     if (angles.empty()) angles.push_back(45.0); // fallback
 
-    // --- Parametr: szerokość przedziału równomiernego (stopnie) ---
-    double spread_deg = 5;           // <-- ustaw tutaj np. 1.0 lub 9.0
+    // --- Parameter: width of the uniform distribution interval (degrees) ---
+    double spread_deg = 5;           // <-- set e.g. 1.0 or 9.0 here
 
-    // Pomocniczna lambda: minimalna różnica kątowa w stopniach (0..360)
+    // Helper lambda: minimum angular difference in degrees (0..360)
     auto minimal_angle_diff_deg = [](double a_deg, double b_deg) {
         double diff = fabs(a_deg - b_deg);
         if (diff > 360.0) diff = fmod(diff, 360.0);
@@ -49,7 +52,7 @@ void his2() {
         return diff;
     };
 
-    // --- Dla każdego kąta generujemy dwa kierunki: theta i theta + 180 ---
+    // --- For each angle, generate two directions: theta and theta + 180 ---
     for (double theta_deg : angles) {
 
         double thetas_deg[2] = { theta_deg, fmod(theta_deg + 180.0, 360.0) };
@@ -58,7 +61,7 @@ void his2() {
 
             double theta_check_deg = thetas_deg[idir];
 
-            // iteracja po siatce punktów
+            // iterate over the grid of points
             for (int ix = 0; ix < RES; ++ix) {
                 double x = -Rmax + 2.0 * Rmax * ix / (RES - 1);
 
@@ -66,53 +69,53 @@ void his2() {
                     double y = -Rmax + 2.0 * Rmax * iy / (RES - 1);
 
                     double r = sqrt(x*x + y*y);
-                    if (r > Rmax) continue; // poza obszarem
+                    if (r > Rmax) continue; // out of area
 
-                    // wektor kierunku theta (w radianach) do testu "przed detektorem"
+                    // direction vector theta (in radians) for "in front of detector" test
                     double theta_rad = theta_check_deg * TMath::DegToRad();
                     double cosT = TMath::Cos(theta_rad);
                     double sinT = TMath::Sin(theta_rad);
 
-                    // Punkt musi leżeć po "stronie źródła" dla tego kierunku
+                    // Point must lie on the "source side" for this direction
                     double dot = x * cosT + y * sinT;
-                    if (dot <= 0) continue; // punkt za detektorem dla tego kierunku
+                    if (dot <= 0) continue; // point behind the detector for this direction
 
-                    // oblicz φ w stopniach w zakresie [0,360)
+                    // calculate φ in degrees in range [0,360)
                     double phi_rad = TMath::ATan2(y, x); // -pi..pi
                     double phi_deg = phi_rad * TMath::RadToDeg();
                     if (phi_deg < 0) phi_deg += 360.0;
 
-                    // minimalna różnica kątowa (stopnie)
+                    // minimum angular difference (degrees)
                     double ddeg = minimal_angle_diff_deg(phi_deg, theta_check_deg);
 
-                    // rozkład równomierny: jeśli w odległości <= spread_deg
+                    // uniform distribution: if within distance <= spread_deg
                     if (ddeg <= spread_deg) {
                         hist->Fill(x, y, 1.0);
                     }
                 }
             }
-        } // koniec pętli idir
-    } // koniec pętli po kątach
+        } // end of idir loop
+    } // end of angles loop
 
-    // --- NORMALIZACJA OSY Z (SKALI KOLORÓW) do zakresu [0, 1] ---
+    // --- Z-AXIS NORMALIZATION (COLOR SCALE) to [0, 1] range ---
     
-    // 1. Obliczamy maksymalną wartość w histogramie
+    // 1. Calculate the maximum value in the histogram
     double max_content = hist->GetMaximum();
     
     if (max_content > 0) {
-        // 2. Skalujemy wszystkie komórki przez 1/max_content
+        // 2. Scale all cells by 1/max_content
         hist->Scale(1.0 / max_content);
     }
     
-    // 3. Ustawiamy skalę kolorów (Z) na [0, 1]
+    // 3. Set the color scale (Z) to [0, 1]
     hist->SetMaximum(1.0);
-    // hist->SetMinimum(0.0); // Opcjonalne
+    // hist->SetMinimum(0.0); // Optional
 
-    // --- Rysowanie ---
+    // --- Drawing ---
     hist->SetContour(800);
     hist->Draw("COLZ");
 
-    // Detektor: czarna kropka
+    // Detector: black dot
     TGraph *det = new TGraph();
     det->SetPoint(0, 0.0, 0.0);
     det->SetMarkerStyle(20);

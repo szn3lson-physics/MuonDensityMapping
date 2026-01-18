@@ -24,17 +24,21 @@ void coindidence_123_124(string file_angles, string file_coindicence);
 
 
 int main (){
-    
+    //excavate only nessessery data
     output_data("../Data/dane_1.log", "../Output/dane_1/angles_1.txt");
     output_data("../Data/dane_2.log", "../Output/dane_2/angles_2.txt");
     output_data("../Data/dane_3.log", "../Output/dane_3/angles_3.txt");
     output_data("../Data/dane_4.log", "../Output/dane_4/angles_4.txt");
     
+    //take excaveted data and assign to each line angles for which detection was done
     time_to_angle("../Output/dane_1/angles_1.txt");
     time_to_angle("../Output/dane_2/angles_2.txt");
     time_to_angle("../Output/dane_3/angles_3.txt");
     time_to_angle("../Output/dane_4/angles_4.txt");
 
+    //take excaveted data with angles and search for needed coincidences
+    //raw means that in data there could be time where detector stopped working
+    //this data for now have to be deleted manually
     coindidence_3("../Output/dane_1/angles_1.txt", "../Output/dane_1/raw/coin_1_3.txt");
     coindidence_3("../Output/dane_2/angles_2.txt", "../Output/dane_2/raw/coin_2_3.txt");
     coindidence_3("../Output/dane_3/angles_3.txt", "../Output/dane_3/raw/coin_3_3.txt");
@@ -63,8 +67,9 @@ int main (){
     coindidence_134_234("../Output/all/angles_all.txt", "../Output/all/coin_134_234.txt");
     coindidence_123_124("../Output/all/angles_all.txt", "../Output/all/coin_123_124.txt");
 
-    process("../Output/coin_x_x.txt", "../Output/processed_x_x.txt");
-    process("../Output/coin_x_x.txt", "../Output/processed_x_x.txt");
+    //process data for histograms (each bar have to have 3 degrees)
+    process("../Output/coin_x_x.txt", "../Output/processed_x_x.txt", 3);
+    process("../Output/coin_x_x.txt", "../Output/processed_x_x.txt", 3);
     
     return 0;
 }
@@ -227,7 +232,6 @@ void time_to_angle(const string& file_angles)
 // Reads a source text file (file_data), processes its lines, and writes
 // selected semicolon-separated fields into a new output file (file_angles).
 //
-// Behavior:
 //   • Lines beginning with "Adafruit" or "Podłączenie karty SD" are skipped.
 //   • For all other lines, the function extracts:
 //         - field at position 1
@@ -440,10 +444,10 @@ void coindidence_3_4f(string file_angles, string file_coindicence){
 // ---------------------------------------------------------------------------
 // Reads an input file (file_angles) and filters the lines based on field 1.
 // Only lines where field 1 are all possible three three coincidences, even the
-// ones that are not physical - i.e. detector 1 and 3. They are taken in coside-
-// ration due to effectiveness of detectors which is below 100%. Then are written 
-// to the output file (file_coindicence). For those lines, the function outputs 
-// fields 0, 1, 2, and 3 in semicolon-separated format.
+// ones that are not physical - i.e. detector 1, 3 and 4. They are taken in 
+// cosideration due to effectiveness of detectors which is below 100%. Then are 
+// written to the output file (file_coindicence). For those lines, the function 
+// outputs fields 0, 1, 2, and 3 in semicolon-separated format.
 //
 // Example output line:
 //     value0 
@@ -463,14 +467,6 @@ void coindidence_3f(string file_angles, string file_coindicence){
 
         while (!data.eof()) {
             getline(data, line);
-
-            // If field 1 equals "000000", write selected fields
-            //if (read_line(1, line.size(), line) == "000000"){
-            //file << read_line(0, line.size(), line) << ";";
-            //file << read_line(1, line.size(), line) << ";";
-            //file << read_line(2, line.size(), line) << ";";
-            //file << read_line(3, line.size(), line) << endl;
-            //}
             if (read_line(1, line.size(), line) == "001011"){
             //file << read_line(0, line.size(), line) << ";";
             //file << read_line(1, line.size(), line) << ";";
@@ -504,6 +500,22 @@ void coindidence_3f(string file_angles, string file_coindicence){
     data.close();
 }
 
+// ---------------------------------------------------------------------------
+// coincidence_3()
+// ---------------------------------------------------------------------------
+// Reads an input file (file_angles) and filters the lines based on field 1.
+// Only lines where field 1 are all possible three three coincidences - ONLY
+// THE PHYSICAL ONCES so detectors 1, 2 and 3 or 2, 3 and 4- without f - false 
+// coincidences. Then are written to  the output file (file_coindicence). For 
+// those lines, the function outputs fields 0, 1, 2, and 3 in semicolon-separa-
+// ted format.
+//
+// Example output line:
+//     value0 
+//     value1
+//     value2
+//     value3
+// ---------------------------------------------------------------------------
 void coindidence_3(string file_angles, string file_coindicence){
 fstream data;
     data.open(file_angles, ios::in);
@@ -516,14 +528,6 @@ fstream data;
 
         while (!data.eof()) {
             getline(data, line);
-
-            // If field 1 equals "000000", write selected fields
-            //if (read_line(1, line.size(), line) == "000000"){
-            //file << read_line(0, line.size(), line) << ";";
-            //file << read_line(1, line.size(), line) << ";";
-            //file << read_line(2, line.size(), line) << ";";
-            //file << read_line(3, line.size(), line) << endl;
-            //}
             if (read_line(1, line.size(), line) == "001011"){
             //file << read_line(0, line.size(), line) << ";";
             //file << read_line(1, line.size(), line) << ";";
@@ -536,18 +540,6 @@ fstream data;
             //file << read_line(2, line.size(), line) << ";";
             file << read_line(3, line.size(), line) << endl;
             }
-            //else if (read_line(1, line.size(), line) == "010101"){
-            //file << read_line(0, line.size(), line) << ";";
-            //file << read_line(1, line.size(), line) << ";";
-            //file << read_line(2, line.size(), line) << ";";
-            //file << read_line(3, line.size(), line) << endl;
-            //}
-            //else if (read_line(1, line.size(), line) == "100110"){
-            //file << read_line(0, line.size(), line) << ";";
-            //file << read_line(1, line.size(), line) << ";";
-            //file << read_line(2, line.size(), line) << ";";
-            //file << read_line(3, line.size(), line) << endl;
-            //}
         }
     } 
     else {
@@ -632,6 +624,19 @@ void process(string inputFileName, string outputFileName, int multiplier){
          << ". Results saved to file " << outputFileName << endl;
 }
 
+// ---------------------------------------------------------------------------
+// coincidence_123_124()
+// ---------------------------------------------------------------------------
+// Reads an input file (file_angles) and filters the lines based on field 1.
+// The function is trying to obtain specific coincidences for analysis. Here
+// coincidences between detectors 1, 2, 3 and 1, 2, 4 are gathered.
+//
+// Example output line:
+//     value0 
+//     value1
+//     value2
+//     value3
+// ---------------------------------------------------------------------------
 void coindidence_123_124(string file_angles, string file_coindicence){
     fstream data;
     data.open(file_angles, ios::in);
@@ -662,10 +667,22 @@ void coindidence_123_124(string file_angles, string file_coindicence){
     else {
         cout << "Access to file was denided!" << endl;
     }
-
     data.close();
 }
 
+// ---------------------------------------------------------------------------
+// coincidence_134_234()
+// ---------------------------------------------------------------------------
+// Reads an input file (file_angles) and filters the lines based on field 1.
+// The function is trying to obtain specific coincidences for analysis. Here
+// coincidences between detectors 1, 3, 4 and 2, 3, 4 are gathered.
+//
+// Example output line:
+//     value0 
+//     value1
+//     value2
+//     value3
+// ---------------------------------------------------------------------------
 void coindidence_134_234(string file_angles, string file_coindicence){
     fstream data;
     data.open(file_angles, ios::in);
@@ -696,6 +713,5 @@ void coindidence_134_234(string file_angles, string file_coindicence){
     else {
         cout << "Access to file was denided!" << endl;
     }
-
     data.close();
 }
