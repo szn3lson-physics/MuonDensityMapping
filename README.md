@@ -4,9 +4,30 @@ This project is part of thesis work "Investigation of muon tomography applicatio
 
 ## Short characteristis of the detector
 The muon detector is mounted horizontally and aligned along the North–South axis. It is only capable of detecting particles arriving horizontally. Because of the symmetry of the detector, it cannot distinguish whether a particle approached from direction φ or φ + 180°, so the azimuthal angle φ is restricted to the range: `0° ≤ φ ≤ 180°`.
-<p align="center"><img width="929" height="448" alt="detector_blueprint" src="https://github.com/user-attachments/assets/735ab743-5e22-4524-94bb-b446b14a9fd8" /></p>
+<p align="center"><img width="789" height="576" alt="detektor_bkgless" src="https://github.com/user-attachments/assets/2766f0b1-8309-4071-813a-fbea22dc62d2" /></p>
 
-The black boxes on the end are the scintilation detectors.
+The black boxes on the end are the scintillation detectors - created thanks to another project done in University of Łódź "Kosmos Widziany z Łodzi" as part of collaboration "CREDO-Maze" - more can be read in [CREDO-Maze Cosmic Ray Mini-Array for Educational Purposes](https://www.mdpi.com/2073-8994/14/3/500).
+
+# ROOT practical remarks of usage on Windows OS
+
+If you encounter the following error when trying to run `thisroot.ps1` in PowerShell:
+
+```text
+C:\root\bin\thisroot.ps1 : File C:\root\bin\thisroot.ps1 cannot be loaded because running scripts is disabled on this system. For more information, see about_Execution_Policies at 
+https:/[go.microsoft.com/fwlink/?LinkID=135170](https://go.microsoft.com/fwlink/?LinkID=135170).
+At line:1 char:1
++ C:\root\bin\thisroot.ps1
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : SecurityError: (:) [], PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess
+```
+To fix this, run the following command in your PowerShell to allow executing local scripts:
+
+`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
+And then proceed as usual - example:
+`C:\root\bin\thisroot.ps1`
+`root ROOT-Histograms\generate_all_histograms.C`
 
 # 📊 2025 Summary & Results
 
