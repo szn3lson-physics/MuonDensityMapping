@@ -1,0 +1,7 @@
+dane_1 - 3days
+dane_2 - 3days18h
+dane_3 - 10days21h
+dane_4 - 19days3h
+dane_5 - 19days12h
+dane_6 - 20days6h
+dane_7 - 10days12h

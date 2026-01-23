@@ -24,53 +24,41 @@ void coindidence_123_124(string file_angles, string file_coindicence);
 
 
 int main (){
-    //excavate only nessessery data
-    output_data("../Data/dane_1.log", "../Output/dane_1/angles_1.txt");
-    output_data("../Data/dane_2.log", "../Output/dane_2/angles_2.txt");
-    output_data("../Data/dane_3.log", "../Output/dane_3/angles_3.txt");
-    output_data("../Data/dane_4.log", "../Output/dane_4/angles_4.txt");
+
+    const int START = 7;   // from which data file to start
+    const int END   = 7;   // where to finish
+
+    for (int i = START; i <= END; ++i) {
+
+        string data_file = "../Data/dane_" + to_string(i) + ".log";
+        string angle_file = "../Output/dane_" + to_string(i) + "/angles_" + to_string(i) + ".txt";
+        string raw_path = "../Output/dane_" + to_string(i) + "/raw/";
+
+        // 1. excavate only nessessery data
+        output_data(data_file, angle_file);
+
+        // 2. take excaveted data and assign to each line angles for which detection was done
+        time_to_angle(angle_file);
+
+        // 3.take excaveted data with angles and search for needed coincidences
+        //raw means that in data there could be time where detector stopped working
+        //this data for now have to be deleted manually
+        coindidence_3 (angle_file, raw_path + "coin_" + to_string(i) + "_3.txt");
+        coindidence_3f(angle_file, raw_path + "coin_" + to_string(i) + "_3f.txt");
+        coindidence_4 (angle_file, raw_path + "coin_" + to_string(i) + "_4.txt");
+        coindidence_3_4 (angle_file, raw_path + "coin_" + to_string(i) + "_34.txt");
+        coindidence_3_4f(angle_file, raw_path + "coin_" + to_string(i) + "_34f.txt");
+    }
     
-    //take excaveted data and assign to each line angles for which detection was done
-    time_to_angle("../Output/dane_1/angles_1.txt");
-    time_to_angle("../Output/dane_2/angles_2.txt");
-    time_to_angle("../Output/dane_3/angles_3.txt");
-    time_to_angle("../Output/dane_4/angles_4.txt");
-
-    //take excaveted data with angles and search for needed coincidences
-    //raw means that in data there could be time where detector stopped working
-    //this data for now have to be deleted manually
-    coindidence_3("../Output/dane_1/angles_1.txt", "../Output/dane_1/raw/coin_1_3.txt");
-    coindidence_3("../Output/dane_2/angles_2.txt", "../Output/dane_2/raw/coin_2_3.txt");
-    coindidence_3("../Output/dane_3/angles_3.txt", "../Output/dane_3/raw/coin_3_3.txt");
-    coindidence_3("../Output/dane_4/angles_4.txt", "../Output/dane_4/raw/coin_4_3.txt");
-
-    coindidence_3f("../Output/dane_1/angles_1.txt", "../Output/dane_1/raw/coin_1_3f.txt");
-    coindidence_3f("../Output/dane_2/angles_2.txt", "../Output/dane_2/raw/coin_2_3f.txt");
-    coindidence_3f("../Output/dane_3/angles_3.txt", "../Output/dane_3/raw/coin_3_3f.txt");
-    coindidence_3f("../Output/dane_4/angles_4.txt", "../Output/dane_4/raw/coin_4_3f.txt");
-
-    coindidence_4("../Output/dane_1/angles_1.txt", "../Output/dane_1/raw/coin_1_4.txt");
-    coindidence_4("../Output/dane_2/angles_2.txt", "../Output/dane_2/raw/coin_2_4.txt");
-    coindidence_4("../Output/dane_3/angles_3.txt", "../Output/dane_3/raw/coin_3_4.txt");
-    coindidence_4("../Output/dane_4/angles_4.txt", "../Output/dane_4/raw/coin_4_4.txt");
-
-    coindidence_3_4("../Output/dane_1/angles_1.txt", "../Output/dane_1/raw/coin_1_34.txt");
-    coindidence_3_4("../Output/dane_2/angles_2.txt", "../Output/dane_2/raw/coin_2_34.txt");
-    coindidence_3_4("../Output/dane_3/angles_3.txt", "../Output/dane_3/raw/coin_3_34.txt");
-    coindidence_3_4("../Output/dane_4/angles_4.txt", "../Output/dane_4/raw/coin_4_34.txt");
-
-    coindidence_3_4f("../Output/dane_1/angles_1.txt", "../Output/dane_1/raw/coin_1_34f.txt");
-    coindidence_3_4f("../Output/dane_2/angles_2.txt", "../Output/dane_2/raw/coin_2_34f.txt");
-    coindidence_3_4f("../Output/dane_3/angles_3.txt", "../Output/dane_3/raw/coin_3_34f.txt");
-    coindidence_3_4f("../Output/dane_4/angles_4.txt", "../Output/dane_4/raw/coin_4_34f.txt");
-    
-    coindidence_134_234("../Output/all/angles_all.txt", "../Output/all/coin_134_234.txt");
-    coindidence_123_124("../Output/all/angles_all.txt", "../Output/all/coin_123_124.txt");
+    //additional coincidances if needed
+        //coindidence_134_234("../Output/all/angles_all.txt", "../Output/all/coin_134_234.txt");
+        //coindidence_123_124("../Output/all/angles_all.txt", "../Output/all/coin_123_124.txt");
 
     //process data for histograms (each bar have to have 3 degrees)
-    process("../Output/coin_x_x.txt", "../Output/processed_x_x.txt", 3);
-    process("../Output/coin_x_x.txt", "../Output/processed_x_x.txt", 3);
-    
+        //process("../Output/coin_x_x.txt", "../Output/processed_x_x.txt", 3);
+        //process("../Output/coin_x_x.txt", "../Output/processed_x_x.txt", 3);
+
+
     return 0;
 }
 
