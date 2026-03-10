@@ -1,0 +1,9 @@
+dane_1 - 09.11.2025 - 4days3h
+dane_2 - 09.11.2025 - 4days21h
+dane_3 - 27.11.2025 - 10days21h
+dane_4 - 05.12.2025 - 19days3h
+dane_5 - 12.12.2025 - 19days12h
+dane_6 - 17.12.2025 - 20days6h
+dane_7 - 14.01.2026 - 11days6h
+dane_8 - 18.02.2026 - 21days9h
+dane_9 - 25.02.2026 - 16days3h

@@ -4,9 +4,9 @@ void his1() {
     // -----------------------------
 
     //give it a name - for future task automatise that ->
-    TH1F *hist = new TH1F("hist", "Histogram 34f Coincidences 15 degree;Angle;Particles", 12, 0, 180);
+    TH1F *hist = new TH1F("hist", "Simulated Coincidences;Angle;Particles", 180, 0, 180);
 
-    std::fstream file("Output/all/3.december_17.12/coin_34f", std::ios::in); // still manually put the name of the data
+    std::fstream file("simulated_muon_data.txt", std::ios::in); // still manually put the name of the data
     double value;
     while (file >> value) {
         hist->Fill(value);
