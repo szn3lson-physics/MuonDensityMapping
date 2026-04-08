@@ -19,7 +19,7 @@ string read_line(int position, int line_size, string line);
 int main(){
 
     const int START = 1;   // from which data file to start
-    const int END   = 9;   // where to finish
+    const int END   = 10;   // where to finish
 
     for (int i = START; i <= END; ++i) {
 
@@ -41,6 +41,7 @@ int time (string file_dane){
     if (line.rfind("Pod", 0) == 0) getline(file, line);
 
     int a = stoi(read_line(13, line.size(), line));
+    //cout << "initial a wynosi" << a << endl;
     int count = 1;
 
     while (getline(file, line)) {
@@ -52,6 +53,7 @@ int time (string file_dane){
                 {
                     count += 1;
                     a = stoi(read_line(13, line.size(), line));
+                    //cout << "nowe a wynosi" << a << endl;
                 }
             }
         }
