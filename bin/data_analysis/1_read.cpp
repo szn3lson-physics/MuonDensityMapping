@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <conio.h>
+//#include <conio.h>
 #include <vector>
 #include <filesystem>
 
@@ -30,7 +30,7 @@ void calculate_time_per_angle(string file_angles, string file_time_output);
 int main (){
 
     const int START = 1;   // from which data file to start
-    const int END   = 10;   // where to finish
+    const int END   = 12;   // where to finish
 
         // Lambda function for safe file copying, which checks if the destination 
         // file exists and removes it before copying to avoid MinGW errors.
@@ -44,10 +44,10 @@ int main (){
         for (int i = START; i <= END; ++i) {
 
             //this folder have to exist bc user is putting there data manually
-            string data_file =      "D:/MuonDensityMapping/data/dane_" + to_string(i) + ".log";
-            string angle_path =     "D:/MuonDensityMapping/output/single/dane_" + to_string(i);
-            string raw_path =       "D:/MuonDensityMapping/output/single/dane_" + to_string(i) + "/raw/";
-            string processed_path = "D:/MuonDensityMapping/output/single/dane_" + to_string(i) + "/processed/";
+            string data_file =      "/home/kacper/MuonDensityMapping/bin/data_analysis/data/dane_" + to_string(i) + ".log";
+            string angle_path =     "/home/kacper/MuonDensityMapping/bin/data_analysis/output/single_series/dane_" + to_string(i);
+            string raw_path =       "/home/kacper/MuonDensityMapping/bin/data_analysis/output/single_series/dane_" + to_string(i) + "/raw/";
+            string processed_path = "/home/kacper/MuonDensityMapping/bin/data_analysis/output/single_series/dane_" + to_string(i) + "/processed/";
             
             //this folder doesnt have to exist so first to check
             folder_managment(angle_path);

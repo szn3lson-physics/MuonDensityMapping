@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <conio.h>
+//#include <conio.h>
 #include <vector>
 #include <filesystem>
 
@@ -12,8 +12,8 @@ void folder_managment(string file);
 string read_line(int position, int line_size, string line);
 void sum_time_and_counts(int start_idx, int end_idx, string output_file);
 
-    string single_directory = "D:/MuonDensityMapping/output/single/dane_";
-    string all_directory = "D:/MuonDensityMapping/output/all/zussamen_";
+    string single_directory = "/home/kacper/MuonDensityMapping/bin/data_analysis/output/single/dane_";
+    string all_directory = "/home/kacper/MuonDensityMapping/bin/data_analysis/output/all/zussamen_";
 
 int main(){
     const int START = 1;   // from which data file to start

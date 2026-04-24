@@ -1,0 +1,2 @@
+Radius_m Chi2 DF Reduced_Chi2 P_Value
+30.0000 39.08 19 2.0568 4.313008e-03

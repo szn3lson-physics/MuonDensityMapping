@@ -18,12 +18,12 @@ string read_line(int position, int line_size, string line);
 
 int main(){
 
-    const int START = 1;   // from which data file to start
-    const int END   = 10;   // where to finish
+    const int START = 11;   // from which data file to start
+    const int END   = 12;   // where to finish
 
     for (int i = START; i <= END; ++i) {
 
-        string data_file = "D:/MuonDensityMapping/data/dane_" + to_string(i) + ".log";
+        string data_file = "/home/kacper/MuonDensityMapping/data/dane_" + to_string(i) + ".log";
         time(data_file);
     }
 }

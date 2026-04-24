@@ -4,9 +4,9 @@ void his1() {
     // -----------------------------
 
     //give it a name - for future task automatise that ->
-    TH1F *hist = new TH1F("hist", "Simulated Coincidences;Angle;Particles", 180, 1, 180);
+    TH1F *hist = new TH1F("hist", "Simulated Coincidences;Angle;Particles", 30, 1, 180);
 
-    std::fstream file("D:\\MuonDensityMapping\\output\\dane_1\\processed\\coin_1_34f.txt", std::ios::in);
+    std::fstream file("/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/1_hole_sim_root_C.txt", std::ios::in);
     //std::fstream file("D:\\MuonDensityMapping\\bin\\simulation\\sim_3_root_events.txt", std::ios::in);
     //std::fstream file("D:\\MuonDensityMapping\\sim_2_root_events.txt", std::ios::in);
     //std::fstream file("D:\\MuonDensityMapping\\bin\\simulation\\80.00_metrow.txt", std::ios::in);

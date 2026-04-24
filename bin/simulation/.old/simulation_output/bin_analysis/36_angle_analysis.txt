@@ -1,0 +1,11 @@
+# Detailed bin-by-bin Chi2 analysis for best bin size
+# Radius: 30.0 m | Best bin size: 36 deg | Chi2: 4.2639 | DF: 4 | Red.Chi2: 1.0660 | P-value: 3.714723e-01
+#
+Bin      Angle_from Angle_to   Observed_O   Theory_E     O_minus_E    Chi2_contrib
+0        1          36         1740         1788.92      -48.92       1.3376    
+1        37         72         1890         1875.33      +14.67       0.1148    
+2        73         108        1799         1841.63      -42.63       0.9870    
+3        109        144        1936         1911.48      +24.52       0.3145    
+4        145        180        1868         1815.64      +52.36       1.5100    
+#
+# TOTAL Chi2 = 4.2639
