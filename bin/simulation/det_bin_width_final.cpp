@@ -1,3 +1,5 @@
+//program liczacy szerokosc slupka
+
 #define _USE_MATH_DEFINES
 #include <cstdio>
 #include <vector>

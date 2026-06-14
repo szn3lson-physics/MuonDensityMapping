@@ -44,7 +44,7 @@ void plot_discovery_sigma() {
 
     int bin_width_deg = 5;
     int n_bins = 180 / bin_width_deg; 
-    double x_min = 1.0;
+    double x_min = 0.0;
     double x_max = 180.0;
 
     // --- Main Histograms ---
@@ -74,6 +74,20 @@ void plot_discovery_sigma() {
             if (std::getline(ss, item, ';')) counts = std::stod(item);
 
             int bin_idx = (angle - 1) / bin_width_deg;
+
+            // --- SPECJALNA POPRAWKA DLA PIERWSZEGO SŁUPKA (KĄTY 1-5) ---
+            if (bin_idx == 0) {
+                if (angle == 1) {
+                    counts *= 2.0; 
+                    // UWAGA: Jeśli w Twoich danych czas w minutach zapisany dla kąta 1 
+                    // też był o połowę krótszy i chcesz to wyrównać, odkomentuj poniższą linijkę:
+                    // time_min *= 2.0; 
+                }
+                if (angle == 5) {
+                    continue; // Pomijamy 5 stopień, żeby słupek zawierał tylko kąty 1, 2, 3, 4
+                }
+            }
+
             if (bin_idx >= 0 && bin_idx < n_bins) {
                 sum_counts_dat[bin_idx] += counts;
                 sum_time_min[bin_idx] += time_min;
@@ -92,6 +106,14 @@ void plot_discovery_sigma() {
         int ang; double theo_counts;
         while (f_bkg_txt >> ang >> theo_counts) {
             int bin_idx = (ang - 1) / bin_width_deg;
+            
+            // --- POPRAWKA TŁA ---
+            // Skoro wywaliliśmy 5 stopień z danych detektora, musimy go też wywalić 
+            // z teoretycznego tła, żeby sprawiedliwie porównywać obszary przestrzeni.
+            if (bin_idx == 0 && ang == 5) {
+                continue; 
+            }
+
             if (bin_idx >= 0 && bin_idx < n_bins) {
                 sum_counts_bkg[bin_idx] += theo_counts;
             }
@@ -159,8 +181,10 @@ void plot_discovery_sigma() {
     pad1->Draw();
     pad1->cd();
 
-    h_dat->SetMaximum(h_dat->GetMaximum() * 1.5);
-    h_dat->SetMinimum(0.0);
+    // Ustawienia osi Y dla h_dat zachowane z poprzedniego polecenia
+    h_dat->SetMaximum(5.2);
+    h_dat->SetMinimum(2.6);
+    
     h_dat->GetXaxis()->SetLabelSize(0); 
     h_dat->GetYaxis()->SetTitle("Muon Rate [Counts / Hour]");
     h_dat->GetYaxis()->SetTitleSize(0.06);
@@ -170,13 +194,14 @@ void plot_discovery_sigma() {
     h_bkg->Draw("HIST SAME");   
     h_dat->Draw("HIST SAME");   
 
+    /*
     TLegend *leg = new TLegend(0.6, 0.70, 0.88, 0.88);
     leg->SetBorderSize(0);
     leg->SetFillStyle(0);
     leg->AddEntry(h_dat, "Measured Data (Detector)", "f");
     leg->AddEntry(h_bkg, "Background Model", "f");
     leg->Draw();
-
+q   */
     // Bottom Pad
     c1->cd();
     TPad *pad2 = new TPad("pad2", "pad2", 0, 0.0, 1, 0.35);
@@ -211,12 +236,12 @@ void plot_discovery_sigma() {
     line0->SetLineStyle(2);
     line0->Draw("SAME");
 
-    TLine *line_p3 = new TLine(x_min, 3, x_max, 3);
+    TLine *line_p3 = new TLine(x_min, 2, x_max, 2);
     line_p3->SetLineColor(kRed);
     line_p3->SetLineStyle(2);
     line_p3->Draw("SAME");
 
-    TLine *line_m3 = new TLine(x_min, -3, x_max, -3);
+    TLine *line_m3 = new TLine(x_min, -2, x_max, -2);
     line_m3->SetLineColor(kBlue);
     line_m3->SetLineStyle(2);
     line_m3->Draw("SAME");

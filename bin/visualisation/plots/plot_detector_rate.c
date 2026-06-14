@@ -51,7 +51,7 @@ struct FileMean {
 
 void plot_detector_rate() {
     const int START = 1;
-    const int END   = 12; 
+    const int END   = 10; 
     const char* INPUT_FILE ="/home/kacper/MuonDensityMapping/bin/data_analysis/data/dane_";
     std::string path = "/home/kacper/MuonDensityMapping/figures/detector_frequency/";
 

@@ -1,3 +1,5 @@
+//[rpgram liczacy wysokosc]
+
 #define _USE_MATH_DEFINES
 #include <cstdio>
 #include <vector>

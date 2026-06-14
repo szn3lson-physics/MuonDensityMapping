@@ -16,7 +16,7 @@
 void plot_rate_per_hour() {
     // ================= PARAMETERS =================
     const int START = 1;
-    const int END   = 12; // Scans files from dane_1.log to dane_12.log
+    const int END   = 10; // Scans files from dane_1.log to dane_12.log
     
     const char* INPUT_FILE ="/home/kacper/MuonDensityMapping/bin/data_analysis/data/dane_";
     std::string path = "/home/kacper/MuonDensityMapping/figures/rate_per_hour/";

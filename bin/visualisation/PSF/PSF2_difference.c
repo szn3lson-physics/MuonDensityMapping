@@ -24,17 +24,15 @@
 // =============================================================================
 
 const char* FILE_DET1_NOHOLE = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/det_1_without_hole.txt";
-const char* FILE_DET2_NOHOLE = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/det_4_without_hole.txt";
+const char* FILE_DET2_NOHOLE = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/det_2_without_hole.txt";
 
-const char* FILE_DET1_HOLE   = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/det_1_with_hole.txt";
-const char* FILE_DET2_HOLE   = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/det_4_with_hole.txt";
+const char* FILE_DET1_HOLE   = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/new_MC_det_1_with_hole_1.txt";
+const char* FILE_DET2_HOLE   = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/new_MC_det_2_with_hole_1.txt";
 
-const char* OUTPUT_NAME = "/home/kacper/MuonDensityMapping/figures/PSF_1_4_Comparison_BW_Inverted.pdf";
+const char* OUTPUT_NAME = "/home/kacper/MuonDensityMapping/figures/det_to_MC_1.pdf";
 
 const double D1X_px = 915,   D1Y_px = 1116; //det_1
-//const double D2X_px = 916,   D2Y_px = 1163; //det_2
-//const double D2X_px = 948,   D2Y_px = 1030; //det_3
-const double D2X_px = 963,   D2Y_px = 1247; //det_4
+const double D2X_px = 916,   D2Y_px = 1163; //det_2
 
 const double D1X =  0.0,  D1Y =  0.0;
 const double D2X =  -(D1X_px - D2X_px) * 0.13333;
@@ -44,16 +42,29 @@ const double SPREAD_DEG = 11.0;
 const double MAX_DIST   = 48.0;
 const double MAP_DIST   = 75.0;
 const double MIN_DIST   = 0.2;
-const int    RES        = 300;
+const int    RES        = 200;
 
 // 0 = Hard Cutoff, 1 = Exponential, 2 = Gaussian
 const int ATTENUATION_MODE = 0;
 
-const double GAMMA_SINGLE   = 1.0;   
-const double GAMMA_COMBINED = 1.0;   
 const double BASELINE_PERCENTILE_SINGLE   = 0.0;
 const double BASELINE_PERCENTILE_COMBINED = 0.0;
 
+// =============================================================================
+//  USTAWIENIA KONTRASTU DLA POJEDYNCZYCH DETEKTORÓW (Kolumna 1 i 2) ORAZ W2K3
+// =============================================================================
+// FILTER_MODE:
+// 0 = Liniowy 
+// 1 = Korekcja Gamma 
+// 2 = S-Curve (Sigmoid)
+const int FILTER_MODE = 2;
+
+// Ustawienia dla S-Curve (FILTER_MODE = 2)
+const double SCURVE_STRENGTH = 6.0; 
+const double SCURVE_CENTER   = 0.5; 
+
+// Ustawienia dla Gamma (FILTER_MODE = 1)
+const double GAMMA_VAL = 0.4; 
 // =============================================================================
 
 double GetAngularDiff(double a, double b) {
@@ -126,32 +137,92 @@ std::vector<double> get_angular_density(const char* filename, double spread_deg)
     return density;
 }
 
-void apply_gamma_scale(TH2F* h, double gamma, double baseline_frac) {
+// Funkcja filtrująca (S-Curve / Gamma)
+void apply_contrast_scale(TH2F* h, double baseline_frac) {
+    double min_val = h->GetMinimum();
     double max_val = h->GetMaximum();
-    if (max_val <= 1e-12) return;
 
-    double cut = max_val * baseline_frac;
+    if (max_val - min_val <= 1e-12) return; 
+
+    double cut = min_val + (max_val - min_val) * baseline_frac;
     double range = max_val - cut;
-    if (range <= 1e-12) range = max_val;
-
-    const double EMPTY_FILL = 1e-9; 
+    if (range <= 1e-12) range = 1e-12; 
 
     for (int i = 1; i <= h->GetNbinsX(); ++i) {
         for (int j = 1; j <= h->GetNbinsY(); ++j) {
             double v = h->GetBinContent(i, j);
 
-            // Wartości ujemne lub poniżej cut ustawiamy na tło
-            if (v <= cut || v <= 1e-12) {
-                h->SetBinContent(i, j, EMPTY_FILL);
+            if (v <= cut) {
+                h->SetBinContent(i, j, 0.001);
                 continue;
             }
 
             double norm = (v - cut) / range;
             if (norm > 1.0) norm = 1.0;
-            if (norm < 0.0) norm = 0.0;
+            
+            double v_out = norm;
 
-            double v_out = std::pow(norm, gamma);
+            if (FILTER_MODE == 1) {
+                v_out = std::pow(norm, GAMMA_VAL);
+            } 
+            else if (FILTER_MODE == 2) {
+                double val = 1.0 / (1.0 + std::exp(-SCURVE_STRENGTH * (norm - SCURVE_CENTER)));
+                double v0  = 1.0 / (1.0 + std::exp(-SCURVE_STRENGTH * (0.0 - SCURVE_CENTER)));
+                double v1  = 1.0 / (1.0 + std::exp(-SCURVE_STRENGTH * (1.0 - SCURVE_CENTER)));
+                v_out = (val - v0) / (v1 - v0);
+            }
+
+            if (v_out < 0.001) v_out = 0.001;
+            if (v_out > 1.0) v_out = 1.0;
+            
             h->SetBinContent(i, j, v_out);
+        }
+    }
+}
+
+// PRZYWRÓCONA FUNKCJA: Fizyczna, skala liniowa dająca dawny wygląd wiersza 1
+void apply_shared_linear_scale(TH2F* h, double max_ref) {
+    if (max_ref <= 1e-12) max_ref = 1.0; 
+
+    for (int i = 1; i <= h->GetNbinsX(); ++i) {
+        for (int j = 1; j <= h->GetNbinsY(); ++j) {
+            double v = h->GetBinContent(i, j);
+            
+            if (v <= 0.0) {
+                h->SetBinContent(i, j, 0.001);
+                continue;
+            }
+
+            double norm = v / max_ref;
+            if (norm > 1.0) norm = 1.0;
+            if (norm < 0.001) norm = 0.001;
+            
+            h->SetBinContent(i, j, norm);
+        }
+    }
+}
+
+// Fizyczna skala różnicowa dla Wiersza 3
+void apply_linear_difference_scale(TH2F* h) {
+    double max_val = h->GetMaximum();
+    
+    if (max_val <= 1e-12) max_val = 1.0; 
+
+    for (int i = 1; i <= h->GetNbinsX(); ++i) {
+        for (int j = 1; j <= h->GetNbinsY(); ++j) {
+            double v = h->GetBinContent(i, j);
+
+            if (v <= 0.0) {
+                h->SetBinContent(i, j, 0.001);
+                continue;
+            }
+
+            double norm = v / max_val;
+            
+            if (norm > 1.0) norm = 1.0;
+            if (norm < 0.001) norm = 0.001;
+            
+            h->SetBinContent(i, j, norm);
         }
     }
 }
@@ -176,7 +247,7 @@ void draw_single_decoration(double x, double y, double radius) {
 void PSF2_difference() {
     gStyle->SetOptStat(0);
 
-    // --- ZMIANA: Odwrócona paleta Czarno-Biała (Czarne tło 0 -> Biały sygnał 1) ---
+    // --- Odwrócona paleta Czarno-Biała (Czarne tło 0 -> Biały sygnał 1) ---
     const Int_t NRGBs = 2;
     Double_t stops[NRGBs] = { 0.00, 1.00 };
     Double_t red[NRGBs]   = { 0.00, 1.00 };
@@ -191,7 +262,6 @@ void PSF2_difference() {
     auto dens1_h  = get_angular_density(FILE_DET1_HOLE, SPREAD_DEG);
     auto dens2_h  = get_angular_density(FILE_DET2_HOLE, SPREAD_DEG);
 
-    // Wyliczenie "sygnału różnicy" z poziomu kątów
     std::vector<double> dens1_diff(360, 0.0);
     std::vector<double> dens2_diff(360, 0.0);
     for (int i = 0; i < 360; ++i) {
@@ -282,22 +352,36 @@ void PSF2_difference() {
 
     fill_single(h1_d, dens1_diff);
     fill_single(h2_d, dens2_diff);
-    fill_combined(hc_d, dens1_diff, dens2_diff);
 
-    // 3. Aplikacja kontrastu (Gamma)
-    apply_gamma_scale(h1_nh, GAMMA_SINGLE,   BASELINE_PERCENTILE_SINGLE);
-    apply_gamma_scale(h2_nh, GAMMA_SINGLE,   BASELINE_PERCENTILE_SINGLE);
-    apply_gamma_scale(hc_nh, GAMMA_COMBINED, BASELINE_PERCENTILE_COMBINED);
-    
-    apply_gamma_scale(h1_h,  GAMMA_SINGLE,   BASELINE_PERCENTILE_SINGLE);
-    apply_gamma_scale(h2_h,  GAMMA_SINGLE,   BASELINE_PERCENTILE_SINGLE);
-    apply_gamma_scale(hc_h,  GAMMA_COMBINED, BASELINE_PERCENTILE_COMBINED);
-    
-    apply_gamma_scale(h1_d,  GAMMA_SINGLE,   BASELINE_PERCENTILE_SINGLE);
-    apply_gamma_scale(h2_d,  GAMMA_SINGLE,   BASELINE_PERCENTILE_SINGLE);
-    apply_gamma_scale(hc_d,  GAMMA_COMBINED, BASELINE_PERCENTILE_COMBINED);
+    // --- REKONSTRUKCJA RÓŻNICOWA DLA KOMBINACJI ---
+    for (int ix = 1; ix <= RES; ++ix) {
+        for (int iy = 1; iy <= RES; ++iy) {
+            double val_h  = hc_h->GetBinContent(ix, iy);  
+            double val_nh = hc_nh->GetBinContent(ix, iy); 
+            hc_d->SetBinContent(ix, iy, val_h - val_nh);
+        }
+    }
 
-    // Wymuszenie skali 0-1 dla kolorów
+    // 3. Aplikacja filtra (S-Curve / Gamma) TYLKO DLA DETEKTORÓW POJEDYNCZYCH
+    apply_contrast_scale(h1_nh, BASELINE_PERCENTILE_SINGLE);
+    apply_contrast_scale(h2_nh, BASELINE_PERCENTILE_SINGLE);
+    
+    apply_contrast_scale(h1_h,  BASELINE_PERCENTILE_SINGLE);
+    apply_contrast_scale(h2_h,  BASELINE_PERCENTILE_SINGLE);
+
+    // WIERSZ 1, KOLUMNA 3 - CZYSZCZENIE LINIOWE (tak jak było)
+    double max_hc = hc_nh->GetMaximum();
+    apply_shared_linear_scale(hc_nh, max_hc);
+
+    // WIERSZ 2, KOLUMNA 3 - ZASTOSOWANIE KONTRASTU S-CURVE (tak jak w drugim programie)
+    apply_contrast_scale(hc_h, BASELINE_PERCENTILE_COMBINED);
+    
+    // CZYSTA SKALA LINIOWA DLA MAP RÓŻNICOWYCH (Wiersz 3)
+    apply_linear_difference_scale(h1_d);
+    apply_linear_difference_scale(h2_d);
+    apply_linear_difference_scale(hc_d);
+
+    // Wymuszenie rygorystycznej skali 0-1 dla kolorów ROOTa
     TH2F* all_hists[9] = {h1_nh, h2_nh, hc_nh, h1_h, h2_h, hc_h, h1_d, h2_d, hc_d};
     for (int i=0; i<9; ++i) {
         all_hists[i]->SetMinimum(0.0);

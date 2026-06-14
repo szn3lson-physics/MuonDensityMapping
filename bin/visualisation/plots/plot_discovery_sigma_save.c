@@ -30,7 +30,7 @@
     //const char* INPUT_BACKGROUND = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/900/bkg/54.00_metrow_gauss.txt";
 
     const char* INPUT_FILE = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/det_1_with_hole.txt";
-    const char* INPUT_BACKGROUND = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/det_1_without_hole.txt";
+    const char* INPUT_BACKGROUND = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/det_2_with_hole.txt";
 
     //const char* OUTPUT_PLOT = "/home/kacper/MuonDensityMapping/figures/900_fit_instant_distance_chi2.pdf";
     //const char* OUTPUT_PLOT = "/home/kacper/MuonDensityMapping/figures/900_fit_exp_distance_chi2.pdf";

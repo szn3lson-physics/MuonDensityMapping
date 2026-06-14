@@ -26,8 +26,13 @@ const std::string OUTPUT_FILE = OUTPUT_FOLDER + "MC_det_4_without_hole.txt";
 
 const double PIXEL_SIZE = 0.13333;
 
-const double DETECTOR_X = 963.0;
-const double DETECTOR_Y = 1247.0;
+//det_2
+const double DETECTOR_X = 916;
+const double DETECTOR_Y = 1163;
+
+//det_4
+//const double DETECTOR_X = 963.0;
+//const double DETECTOR_Y = 1247.0;
 
 const double MAX_RADIUS_M = 48.0;   // R0 dla wygaszania
 const double VIEW_RADIUS_M = 100.0; // Maksymalny zasięg promieni (wcześniej skanowało tylko do MAX_RADIUS_M)
@@ -44,7 +49,7 @@ const double ROCK_DENSITY = 2.65;
 // --- PARAMETRY CZYSTEGO, WIRTUALNEGO EKSPERYMENTU ---
 // =======================================================
 const double VIRTUAL_TIME_PER_ANGLE_MIN = 500.0; // 300 minut ekspozycji na każdy stopień
-const int VIRTUAL_TOTAL_EVENTS = 10000;        // Zakładana łączna liczba zrejestrowanych mionów
+const int VIRTUAL_TOTAL_EVENTS = 5000;        // Zakładana łączna liczba zrejestrowanych mionów
 // =======================================================
 
 
@@ -54,10 +59,10 @@ const int VIRTUAL_TOTAL_EVENTS = 10000;        // Zakładana łączna liczba zre
 // 1 = Exponential (Zanik eksponencjalny e^(-r/R0))
 // 2 = Gaussian (Zanik gaussowski e^(-(r/R0)^2))
 // =======================================================
-const int ATTENUATION_MODE = 0; 
+const int ATTENUATION_MODE = 2; 
 
 // ---- MONTE CARLO SCHEME ----
-const int BACKGROUND_NOISE_PER_BIN = 0;  
+const int BACKGROUND_NOISE_PER_BIN = 5;  
 const double MC_STAT_MULTIPLIER = 1.0; // Ustawione na 1.0 dla naturalnej symulacji, chyba że chcesz więcej statystyki
 
 const int ASCII_BIN_SIZE = 5;  

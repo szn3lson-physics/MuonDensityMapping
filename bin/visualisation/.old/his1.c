@@ -4,9 +4,10 @@ void his1() {
     // -----------------------------
 
     //give it a name - for future task automatise that ->
-    TH1F *hist = new TH1F("hist", "Simulated Coincidences;Angle;Particles", 30, 1, 180);
+    TH1F *hist = new TH1F("hist", "Symulowane koincydencje;Kat;Liczba czastek", 36, 1, 180);
 
-    std::fstream file("/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/1_hole_sim_root_C.txt", std::ios::in);
+    std::fstream file("/home/kacper/MuonDensityMapping/bin/data_analysis/output/single_series/dane_1_2_3_4_5_6_8.txt", std::ios::in);
+    //std::fstream file("/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/1_hole_sim_root_C.txt", std::ios::in);
     //std::fstream file("D:\\MuonDensityMapping\\bin\\simulation\\sim_3_root_events.txt", std::ios::in);
     //std::fstream file("D:\\MuonDensityMapping\\sim_2_root_events.txt", std::ios::in);
     //std::fstream file("D:\\MuonDensityMapping\\bin\\simulation\\80.00_metrow.txt", std::ios::in);
@@ -96,7 +97,7 @@ void his1() {
     mean_y_text->SetTextSize(0.04);
     mean_y_text->SetTextColor(kBlue);
     mean_y_text->SetTextAlign(31); // Align Right, Bottom
-    mean_y_text->DrawLatex(x_max * 0.95, mean_y * 1.05, Form("Mean (Y): %.2f", mean_y));
+    mean_y_text->DrawLatex(x_max * 0.95, mean_y * 1.05, Form("Srednia (Y): %.2f", mean_y));
 
 
     // -----------------------------

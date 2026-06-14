@@ -15,7 +15,7 @@
 // =============================================================================
 //  PARAMETERS FOR MANUAL ADJUSTMENT
 // =============================================================================
-const char* INPUT_FILE = "/home/kacper/MuonDensityMapping/output/all/zussamen_10/coin_34f.txt";
+const char* INPUT_FILE = "/home/kacper/MuonDensityMapping/bin/data_analysis/output/selected_rot_series/series_900.txt";
 const char* OUTPUT_NAME = "/home/kacper/MuonDensityMapping/figures/PSF_Reconstruction_1.pdf";
 
 const int SMOOTH_RADIUS = 8;

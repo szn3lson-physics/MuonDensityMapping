@@ -57,7 +57,7 @@ void load_model_data(ModelData& md) {
 
 void plot_height() {
     const char* OUTPUT_PLOT = "/home/kacper/MuonDensityMapping/figures/fit_height_combined.pdf";
-    std::string base_dir = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/hight_analysis/";
+    std::string base_dir = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/height_analysis/";
 
     // SPRAWDŹ TE ŚCIEŻKI: Upewnij się, że foldery instant, exp i gauss istnieją w height_analysis!
     std::vector<ModelData> models = {
@@ -65,7 +65,6 @@ void plot_height() {
         {"Exponential", base_dir + "exp/height_analysis.txt",     {}, {}, 1e18, 0, kRed},
         {"Gaussian",    base_dir + "gauss/height_analysis.txt",   {}, {}, 1e18, 0, TColor::GetColor("#0072B2")}
     };
-
     int loaded_models = 0;
     for (auto& md : models) {
         load_model_data(md);
@@ -97,11 +96,12 @@ void plot_height() {
     TMultiGraph* mg = new TMultiGraph();
     mg->SetTitle("Cavity Height Optimization Using #chi^{2} Goodness-of-Fit Test");
 
+    /*
     TLegend* leg = new TLegend(0.45, 0.70, 0.88, 0.88); 
     leg->SetTextFont(132);
     leg->SetTextSize(0.035);
     leg->SetBorderSize(1);
-
+    */
     for (auto& md : models) {
         if (md.v_height.empty()) continue;
         
@@ -118,7 +118,7 @@ void plot_height() {
         mg->Add(gr, "L"); // Używamy "L" dla dodania jako linia
 
         std::string leg_text = Form("%s (Best: H=%.1f m, #chi^{2}/df=%.3f)", md.name.c_str(), md.best_height, md.min_chi2);
-        leg->AddEntry(gr, leg_text.c_str(), "l"); 
+        //leg->AddEntry(gr, leg_text.c_str(), "l"); 
     }
 
     // POPRAWKA: Wymuszenie linii ("AL")
@@ -148,7 +148,7 @@ void plot_height() {
         lx->Draw("SAME");
     }
 
-    leg->Draw("SAME");
+    //leg->Draw("SAME");
     c1->SaveAs(OUTPUT_PLOT);
     std::cout << "Plot generated: " << OUTPUT_PLOT << std::endl;
 }

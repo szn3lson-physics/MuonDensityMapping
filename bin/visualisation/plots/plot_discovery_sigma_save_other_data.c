@@ -1,6 +1,7 @@
 //====================================
 // Kacper Dorszewski                 ||
-// plot_muography_analysis.C         ||
+// plot_muography_analysis.C 
+// rysowanie resiudow tutaj          ||
 //====================================
 
 #include <TH1F.h>
@@ -15,11 +16,11 @@
 #include <TPad.h>
 #include <vector>
 
-    const char* INPUT_FILE = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/det_3_with_hole.txt";
-    const char* INPUT_BACKGROUND = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/det_3_without_hole.txt";
+    const char* INPUT_FILE = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/det_1_with_hole.txt";
+    const char* INPUT_BACKGROUND = "/home/kacper/MuonDensityMapping/bin/simulation/simulation_output/MC_single/det_1_without_hole.txt";
 
-    const char* OUTPUT_PLOT = "/home/kacper/MuonDensityMapping/figures/residua_detektor_3.pdf";
-    const char* OUTPUT_TEXT = "/home/kacper/MuonDensityMapping/bin/visualisation/output/residua_detektor_3.txt";
+    const char* OUTPUT_PLOT = "/home/kacper/MuonDensityMapping/figures/residua_detektor_1.pdf";
+    const char* OUTPUT_TEXT = "/home/kacper/MuonDensityMapping/bin/visualisation/output/residua_detektor_1.txt";
 
 void plot_discovery_sigma_save_other_data() {
     // --- Global Style Settings ---
@@ -184,8 +185,10 @@ void plot_discovery_sigma_save_other_data() {
     pad1->Draw();
     pad1->cd();
 
-    h_dat->SetMaximum(h_dat->GetMaximum() * 1.5);
-    h_dat->SetMinimum(0.0);
+    // Zmienione ustawienia osi Y dla h_dat
+    h_dat->SetMaximum(7.3);
+    h_dat->SetMinimum(6.0);
+    
     h_dat->GetXaxis()->SetLabelSize(0); 
     h_dat->GetYaxis()->SetTitle("Muon Rate [Counts / Hour]");
     h_dat->GetYaxis()->SetTitleSize(0.06);
@@ -195,13 +198,14 @@ void plot_discovery_sigma_save_other_data() {
     h_bkg->Draw("HIST SAME");   
     h_dat->Draw("HIST SAME");   
 
+    /*
     TLegend *leg = new TLegend(0.6, 0.70, 0.88, 0.88);
     leg->SetBorderSize(0);
     leg->SetFillStyle(0);
     leg->AddEntry(h_dat, "Measured Data (Detector)", "f");
     leg->AddEntry(h_bkg, "Background Model", "f");
     leg->Draw();
-
+    */
     // Bottom Pad
     c1->cd();
     TPad *pad2 = new TPad("pad2", "pad2", 0, 0.0, 1, 0.35);

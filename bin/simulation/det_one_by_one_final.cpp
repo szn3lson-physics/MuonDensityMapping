@@ -1,3 +1,5 @@
+//program liczacy R
+
 #define _USE_MATH_DEFINES
 #include <cstdio>
 #include <vector>
